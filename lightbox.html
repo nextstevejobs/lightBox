@@ -10,11 +10,11 @@
 			margin:0;
 			padding:0;
 		}
-		#G-lightbox-mask{position:fixed;left:0;top:0;width:100%;height:100%;z-index:100;background:#000;opacity: .5;}
-		#G-lightbox-poppup{position: fixed;left:50%;margin-left:-150px;margin-top:-150px;top:50%;width:300px;height:300px;z-index:101;}
+		#G-lightbox-mask{position:fixed;left:0;top:0;width:100%;height:100%;z-index:100;background:#000;opacity: .5;display: none;}
+		#G-lightbox-poppup{position: fixed;left:50%;margin-left:-150px;margin-top:-150px;top:50%;width:300px;height:300px;z-index:101;display: none;}
 		.lightbox-image{width:100%;}
-		.lightbox-pic-view{position: relative;border:5px solid #fff;border-radius:3px;overflow: hidden;background: url(img/icon/loading.gif)no-repeat center center}
-		#G-lightbox-poppup .lightbox-pic-view .lightbox-btn{position:absolute;top: 0;width:40%;height:100%;z-index:1;background: #0c0;}
+		.lightbox-pic-view{position: relative;border:5px solid #fff;border-radius:3px;overflow: hidden;background: url(img/icon/loading.gif)no-repeat center center;background-color: #fff;}
+		#G-lightbox-poppup .lightbox-pic-view .lightbox-btn{position:absolute;top: 0;width:40%;height:100%;z-index:1;/*background: #0c0;*/}
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-prev-btn{left:0;}
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-next-btn{right:0;}
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-prev-btn-show{background: url(img/icon/prev.png) no-repeat left center;cursor:pointer;}
@@ -38,7 +38,74 @@
 	<script type="text/javascript" src="js/lightbox.js"></script>
 </head>
 <body>
-	<div id="G-lightbox-mask"></div>
+	<h1>第一组图片</h1>
+	<div>
+		<img class="js-lightbox"
+			src="img/2.jpg" 
+			data-group="1"
+			data-role="lightbox"
+			data-source="img/2.jpg"
+			data-id="1"
+			data-caption="some1"
+			width="100" height="100" 
+			>
+		<img class="js-lightbox"
+			src="img/3.jpg" 
+			data-group="1"
+			data-role="lightbox"
+			data-source="img/3.jpg"
+			data-id="2"
+			data-caption="some2"
+			width="100" height="100" 
+			>
+		<img src="img/4.jpg" 
+			data-group="1"
+			data-role="lightbox"
+			data-source="img/4.jpg"
+			data-id="3"
+			data-caption="some3"
+			width="100" height="100" 
+			>
+		<img src="img/5.jpg" 
+			data-group="1"
+			data-role="lightbox"
+			data-source="img/5.jpg"
+			data-id="4"
+			data-caption="some4"
+			width="100" height="100" 
+			>	
+	</div>
+	<h1>第二组图片</h1>
+	<div>
+		<img src="img/6.jpg" 
+			data-group="2"
+			data-role="lightbox"
+			data-source="img/6.jpg"
+			data-id="6"
+			data-caption="some6"
+			width="100" height="100" 
+			>
+		<img src="img/7.jpg" 
+			data-group="2"
+			data-role="lightbox"
+			data-source="img/7.jpg"
+			data-id="7"
+			data-caption="some7"
+			width="100" height="100" 
+			>
+		<img src="img/8.jpg" 
+			data-group="2"
+			data-role="lightbox"
+			data-source="img/8.jpg"
+			data-id="8"
+			data-caption="some8"
+			width="100" height="100" 
+			>
+	</div>
+
+
+
+	<!-- <div id="G-lightbox-mask"></div>
 
 	<div id="G-lightbox-poppup">
 		<div class="lightbox-pic-view">
@@ -53,7 +120,7 @@
 			</div>
 			<span class="lightbox-close-btn"></span>
 		</div>
-	</div>
+	</div> -->
 	
 <script type="text/javascript">
 	$(function(){
