@@ -38,13 +38,78 @@
 			}
 
 			//初始化弹出部分
-			self.initPopup($(this));
-			
+			self.initPopup($(this));	
+		})
+		//关闭弹出
+		this.popupMask.click(function(){
+			$(this).fadeOut();
+			self.popupWin.fadeOut()
+		})
+		this.closeBtn.click(function(){
+			self.popupMask.fadeOut()
+			self.popupWin.fadeOut()
+		})
+
+		//绑定上下切换按钮
+		var flag = true;
+		this.nextBtn.hover(function(){
+			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+				$(this).addClass("lightbox-next-btn-show")
+			}
+		},function(){
+			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+				$(this).removeClass("lightbox-next-btn-show")
+			}
+		}).click(function(e){
+			if(!$(this).hasClass("disabled")&&self.flag){
+				self.flag = false;
+				e.stopPropagation()
+				self.goto("next")
+			}
+		})
+
+		this.prevBtn.hover(function(){
+			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+				$(this).addClass("lightbox-prev-btn-show")
+			}
+		},function(){
+			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+				$(this).removeClass("lightbox-prev-btn-show")
+			}
+		}).click(function(e){
+			if(!$(this).hasClass("disabled") &&self.flag){
+				self.flag = false;
+				e.stopPropagation()
+				self.goto("prev")
+			}
 		})
 	};
 
 	LightBox.prototype={
-
+		goto:function(dir){
+			if(dir === "next"){
+				this.index++
+				if(this.index >= this.groupData.length-1){
+					this.nextBtn.addClass("disabled").removeClass("lightbox-next-btn-show")
+				}
+				if(this.index != 0){
+					this.nextBtn.removeClass("disabled")
+				}
+				var src = this.groupData[this.index].src;
+				this.loadPicSize(src);
+			}
+			if(dir === "prev"){
+				this.index--
+				if(this.index <= 0){
+					this.prevBtn.addClass("disabled").removeClass("lightbox-prev-btn-show")
+				}
+				if(this.index != this.groupData[this.index].length-1){
+					this.nextBtn.removeClass("disabled")
+				}
+				var src = this.groupData[this.index].src
+				this.loadPicSize(src)
+			}
+		},
 		initPopup:function(currentObj){
 			var self = this,
 				sourceSrc = currentObj.attr("data-source"),
@@ -99,13 +164,50 @@
 		loadPicSize:function(sourceSrc){
 			//console.log(sourceSrc)
 			var self=this;
+			self.popupPic.css({width:"auto",height:"auto"}).hide()
 			this.preLoadImg(sourceSrc,function(){
 				self.popupPic.attr("src",sourceSrc) 
 				var picWidth = self.popupPic.width(),
 					picHeight = self.popupPic.height()
-					console.log(picWidth+':'+picHeight)
+					//console.log(picWidth+':'+picHeight)
+					self.changePic(picWidth,picHeight)
 
 			})
+		},
+		changePic:function(width,height){
+			var self = this,
+				winWidth = $(window).width(),
+				winHeight = $(window).height();
+				console.log("winHeight"+winHeight)
+			//如图片的宽高大于浏览器视口的宽高比例，我就看一下是否有益处
+			var scale = Math.min(winWidth/(width+10),winHeight/(height+10),1);
+			console.log("scale"+scale)
+			width = width*scale;
+			height = height*scale;
+
+			this.picViewArea.animate({
+				width:width-10,
+				height:height-10
+			});
+			this.popupWin.animate({
+					width:width,
+					height:height,
+					marginLeft:-(width/2),
+					top:(winHeight-height)/2
+			},function(){
+				self.popupPic.css({
+					width:width-10,
+					height:height-10
+				}).fadeIn();
+				self.picCaptionArea.fadeIn();
+				self.flag = true;
+			})	
+
+			//设置描述文字和当前索引
+			console.log(this.index);
+			//groupData
+			this.captionText.text(this.groupData[this.index].caption);
+			this.currentIndex.text("当前索引:"+(this.index+1)+"of"+this.groupData.length)
 		},
 		preLoadImg:function(src,callback){
 			var img = new Image();
