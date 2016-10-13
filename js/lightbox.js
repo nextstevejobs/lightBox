@@ -1,7 +1,12 @@
 ;(function($){
 	//alert(1);
-	var LightBox = function(){
+	var LightBox = function(settings){
 		var self = this;
+		this.settings={
+			speed:500
+		}
+		//没传过来的话，就给一个空对象
+		$.extend(this.settings,settings || {})
 		//创建遮罩和弹出框
 		this.popupMask = $('<div id="G-lightbox-mask">')
 		this.popupWin = $('<div id="G-lightbox-poppup">')
@@ -44,24 +49,30 @@
 		this.popupMask.click(function(){
 			$(this).fadeOut();
 			self.popupWin.fadeOut()
+			self.clear = false;	
 		})
 		this.closeBtn.click(function(){
 			self.popupMask.fadeOut()
 			self.popupWin.fadeOut()
+			self.clear = false;	
 		})
 
 		//绑定上下切换按钮
+		//定义标识
 		var flag = true;
 		this.nextBtn.hover(function(){
 			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+				console.log("next")
 				$(this).addClass("lightbox-next-btn-show")
 			}
 		},function(){
+			console.log($(this).hasClass("disabled"));
 			if(!$(this).hasClass("disabled") && self.groupData.length>1){
 				$(this).removeClass("lightbox-next-btn-show")
 			}
 		}).click(function(e){
-			if(!$(this).hasClass("disabled")&&self.flag){
+			console.log("bs"+this.index);
+			if(!$(this).hasClass("disabled") && self.flag){
 				self.flag = false;
 				e.stopPropagation()
 				self.goto("next")
@@ -71,17 +82,33 @@
 		this.prevBtn.hover(function(){
 			if(!$(this).hasClass("disabled") && self.groupData.length>1){
 				$(this).addClass("lightbox-prev-btn-show")
+
 			}
 		},function(){
+
 			if(!$(this).hasClass("disabled") && self.groupData.length>1){
+
 				$(this).removeClass("lightbox-prev-btn-show")
+
 			}
 		}).click(function(e){
-			if(!$(this).hasClass("disabled") &&self.flag){
+			if(!$(this).hasClass("disabled") && self.flag){
 				self.flag = false;
 				e.stopPropagation()
 				self.goto("prev")
 			}
+		})
+		//绑定窗口调整事件
+		var timer = null;
+		//要把它设置在this上，否则弹框出来后会找不到这个变量
+		this.clear = false;
+		$(window).resize(function(){
+			window.clearTimeout(timer)
+			if(self.clear){
+				timer=window.setTimeout(function(){
+					self.loadPicSize(self.groupData[self.index].src)
+				},500);	
+			}	
 		})
 	};
 
@@ -90,9 +117,15 @@
 			if(dir === "next"){
 				this.index++
 				if(this.index >= this.groupData.length-1){
+					//当小标等于3时会触发，但是为什么一定鼠标离开弹出框的区域后再次进入，会自己去掉disable类名呢
+					console.log("next"+this.index);
+					console.log("next2"+(this.groupData.length-1));
 					this.nextBtn.addClass("disabled").removeClass("lightbox-next-btn-show")
+					
+
 				}
-				if(this.index != 0){
+
+				if(this.index != 0 && this.index != this.groupData.length-1){
 					this.nextBtn.removeClass("disabled")
 				}
 				var src = this.groupData[this.index].src;
@@ -139,7 +172,7 @@
 				top:-viewHeight
 			}).animate({
 				top:winHeight-viewHeight
-			},function(){
+			},self.settings.speed,function(){
 				//加载图片
 				self.loadPicSize(sourceSrc);
 			})
@@ -165,6 +198,7 @@
 			//console.log(sourceSrc)
 			var self=this;
 			self.popupPic.css({width:"auto",height:"auto"}).hide()
+			self.picCaptionArea.hide()
 			this.preLoadImg(sourceSrc,function(){
 				self.popupPic.attr("src",sourceSrc) 
 				var picWidth = self.popupPic.width(),
@@ -188,19 +222,20 @@
 			this.picViewArea.animate({
 				width:width-10,
 				height:height-10
-			});
+			},self.settings.speed);
 			this.popupWin.animate({
 					width:width,
 					height:height,
 					marginLeft:-(width/2),
 					top:(winHeight-height)/2
-			},function(){
+			},self.settings.speed,function(){
 				self.popupPic.css({
 					width:width-10,
 					height:height-10
 				}).fadeIn();
 				self.picCaptionArea.fadeIn();
 				self.flag = true;
+				self.clear=true;
 			})	
 
 			//设置描述文字和当前索引

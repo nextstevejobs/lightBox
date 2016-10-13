@@ -20,10 +20,11 @@
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-prev-btn-show{background: url(img/icon/prev.png) no-repeat left center;cursor:pointer;}
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-next-btn-show{background: url(img/icon/next.png) no-repeat right center;cursor:pointer;}
 		#G-lightbox-poppup .lightbox-pic-view .lightbox-image{display: block;}
-		#G-lightbox-poppup .lightbox-pic-caption{position: relative;top:-60px;margin:0 5px;background-color: #ddd;}
+		#G-lightbox-poppup .lightbox-pic-caption{position: relative;top:-60px;margin:0 5px;background-color: #ddd;opacity:.5;}
 		#G-lightbox-poppup .lightbox-pic-caption .lightbox-caption-area{padding:10px 5px;color:#fff;}
 		#G-lightbox-poppup .lightbox-pic-caption .lightbox-caption-area .lightbox-of-index{color:#999;}
 		#G-lightbox-poppup .lightbox-pic-caption .lightbox-close-btn{position: absolute;right:10px;top:13px;width:27px;height:27px;background:url(img/icon/close.png) no-repeat center center;z-index: 100000}
+
 	</style>
 	<!-- <script type="text/javascript">
 		var docEl = document.documentElement,
@@ -34,7 +35,7 @@
 		window.addEventListener('resizeEvt',recalc,false);
 		document.addEventListener('DOMContentLoaded',recalc,false);	
 	</script> -->
-	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="js/lightbox.js"></script>
 </head>
 <body>
@@ -124,7 +125,11 @@
 	
 <script type="text/javascript">
 	$(function(){
-		var lightBox = new LightBox();
+		var lightBox = new LightBox({
+			speed:"fast",
+			maxWidth:900,
+			maxHeight:600
+		});
 	});
 </script>
 </body>
